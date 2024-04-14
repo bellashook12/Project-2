@@ -1,6 +1,5 @@
 import { html, css } from 'lit';
 import { DDD } from "@lrnwebcomponents/d-d-d/d-d-d.js";
-import "@lrnwebcomponents/rpg-character/rpg-character.js";
 
 
 export class TaggingQuestion extends DDD {
@@ -12,6 +11,7 @@ export class TaggingQuestion extends DDD {
   constructor() {
     super();
     this.question = "idk atm";
+    this.image = "";  //"https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRPgSRgEYJ3lY8Ky8wNqfoJqWe2U2VMe-RIKbO_0HSXGj5sHA-_"
     
      
   }
@@ -21,12 +21,30 @@ export class TaggingQuestion extends DDD {
     return css`
       :host {
         display: flex;
+        align-items: center;
+        justify-content: center;
+        
+      }
+
+      .background{
+        background-color: var(--ddd-theme-default-beaver70);
+        padding: 8px;
+        display:flex;
+        height: 300px;
+        width: 600px;
+        flex-direction: column;
+      }
+
+      .image{
+        display: flex;
+        
         
       }
 
       .question {
         color: black;
         font-size: 24px; 
+                
       }
 
   `;
@@ -36,8 +54,10 @@ export class TaggingQuestion extends DDD {
   render() {
     return html`
     <div class= "wrapper">
-      <div class= "backgroud">
-        <div class="question">Question : ${this.question}</div>
+      <div class= "background">
+        <img class= "image" src= ${this.image} >
+          <div class="question">Question: ${this.question}</div>
+
 
         
       </div>
@@ -50,7 +70,7 @@ export class TaggingQuestion extends DDD {
 
   static get properties() {
     return {
-      characters: { type: Array },            
+      question: { type: Array },            
       
     };
   }
