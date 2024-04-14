@@ -11,17 +11,16 @@ export class TaggingQuestion extends DDD {
   
   constructor() {
     super();
+    this.question = "idk atm";
     
      
   }
 
-  add(e){
-
-  }
+  
   static get styles() {
     return css`
       :host {
-        display: inline-flex;
+        display: flex;
         
       }
 
@@ -30,20 +29,17 @@ export class TaggingQuestion extends DDD {
         font-size: 24px; 
       }
 
-      
-        
-
   `;
   }
-
 
   
   render() {
     return html`
     <div class= "wrapper">
-      <div class= "question">
-        <p>hello</p>
-      
+      <div class= "backgroud">
+        <div class="question">Question : ${this.question}</div>
+
+        
       </div>
     </div>
 
@@ -54,10 +50,7 @@ export class TaggingQuestion extends DDD {
 
   static get properties() {
     return {
-      characters: { type: Array },
-      numChar: { type: Number, reflext: true},
-      message:{type:String,reflect:true},
-            
+      characters: { type: Array },            
       
     };
   }
