@@ -51,7 +51,7 @@ export class TaggingQuestion extends DDD {
       .image{
         display: flex;
         height: 400px;
-        width: 400px;
+        width: 500px;
         border: solid;
         align-self: center;
         
@@ -148,8 +148,11 @@ export class TaggingQuestion extends DDD {
       }
 
       .feedbackArea{
-        background-color: lightgray;
+        //background-color: lightgray;
         height: 10px;
+        flex-direction: column;
+        height: 30px;
+        font-size: 18px;
       }
 
       
@@ -157,7 +160,7 @@ export class TaggingQuestion extends DDD {
   }
 
 
- check() {  
+ fromJson() {  
 
   fetch('src/answers.json')
   .then((response) => response.json())
@@ -170,6 +173,7 @@ export class TaggingQuestion extends DDD {
         for (const key in possibleQuestions) {
           const option = possibleQuestions[key];
           const choice = document.createElement('choices');
+          choice.classList.add('chip');
           choice.textContent = key;
           choice.dataset.correct = option.correct;
           choice.dataset.feedback = option.feedback;
@@ -180,7 +184,7 @@ export class TaggingQuestion extends DDD {
           this.options.push(choice);
         });
 
-        //this.shuffle();
+        this.shuffle();
     });
   }
 
@@ -208,7 +212,7 @@ export class TaggingQuestion extends DDD {
       questionBox.addEventListener('dragleave', (e) => this.dragLeave(e));
       questionBox.addEventListener('drop', (e) => this.drop(e, 'answer-options-box'));
     });
-    this.check();
+    this.fromJson();
   }
 
   dragOver(e) {
@@ -266,43 +270,112 @@ export class TaggingQuestion extends DDD {
     this.requestUpdate();
   }
 
-  clear() {
-    if (this.correctAnswers != '') {
+  reset() {
+    const feedbackArea = this.shadowRoot.querySelector('.feedbackArea');
+    feedbackArea.innerHTML = '';
 
-      this.correctAnswers.forEach(answer => {
-        this.options.push(answer);
-      });
-
-      this.correctAnswers = [];
-      
-      
+    if (this.correctAnswers.length > 0) {
+        this.correctAnswers.forEach(answer => {
+            this.options.push(answer);
+        });
+        this.correctAnswers = [];
     }
+
+    this.checked = false; 
+    this.shadowRoot.querySelector('.checkBtn').classList.remove('disabled'); // Enable check button
+
+    this.shuffle();
     this.requestUpdate();
+}
+
+  shuffle() {
+    for (let i = this.options.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [this.options[i], this.options[j]] = [this.options[j], this.options[i]];
+    }
   }
 
-  checkAnswers() {
-    
-    const correctAnswers = this.options.map(option => option.textContent);
-  const correctOptions = this.correctOptions;
-  const feedback = correctOptions.map(option => option.dataset.feedback);
 
-  // Compare user answers with correct answers
-  const result = correctAnswers.map((userAnswer, index) => {
-    const correctAnswer = correctOptions[index].textContent;
-    const isCorrect = userAnswer === correctAnswer;
-    const feedbackMessage = isCorrect ? "Correct" : `Incorrect. Feedback: ${feedback[index]}`;
-    return { answer: userAnswer, correct: isCorrect, feedback: feedbackMessage };
-  });
+ 
 
-  // Display feedback in the feedbackArea
-  const feedbackArea = this.shadowRoot.querySelector('.feedbackArea');
-  feedbackArea.innerHTML = ''; // Clear previous feedback
-  result.forEach(({ feedback }) => {
-    const feedbackDiv = document.createElement('div');
-    feedbackDiv.textContent = feedback;
-    feedbackArea.appendChild(feedbackDiv);
-  });
-}
+
+
+
+  checkTags() {
+    if(this.checked == false){
+      
+      this.checked = true;
+
+      
+      let allDroppedCorrect = true;
+      let allBankedCorrect = true;
+  
+      this.shadowRoot.querySelector('.checkBtn').classList.add('disabled');
+  
+      // Reset feedback section
+      this.shadowRoot.querySelector('.feedbackArea').style.display = 'flex';
+      this.shadowRoot.querySelector('.feedbackArea').innerHTML = ``;
+
+      // Dropped tags:
+      const droppedTags = this.shadowRoot.querySelectorAll('.correctAnswers .chip');
+      for (const tag of droppedTags) {
+          const isCorrect = tag.dataset.correct === 'true';
+          if(isCorrect){
+            tag.classList.add("correct");
+            
+
+            // FEEDBACK SEC CORRECT
+            this.shadowRoot.querySelector('.feedbackArea').innerHTML += `<li class="green">${tag.dataset.feedback}</li>`;
+          }
+          else {
+            tag.classList.add("incorrect");
+            allDroppedCorrect = false;
+            tag.title = tag.dataset.feedback;
+            
+
+            // FEEDBACK SEC INCORRECT
+            this.shadowRoot.querySelector('.feedbackArea').innerHTML += `<li class="red">${tag.dataset.feedback}</li>`;
+          }
+          tag.classList.add("noPointerEvents");
+          tag.setAttribute('tabindex', -1);
+      }
+  
+      // Banked tags:
+      const bankedTags = this.shadowRoot.querySelectorAll('.choices .chip');
+      for (const tag of bankedTags) {
+          const isCorrect = tag.dataset.correct === 'true';
+          if(isCorrect){
+            allBankedCorrect = false;
+            tag.title = tag.dataset.feedback;
+
+            // FEEDBACK SEC
+            //this.shadowRoot.querySelector('#feedbackSection').innerHTML += `<li class="green">${tag.dataset.feedback}</li>`;
+          }
+          tag.classList.add("noPointerEvents");
+          tag.setAttribute('tabindex', -1);
+      }
+  
+      if(allDroppedCorrect && allBankedCorrect) {  // All answers (banked and dropped) are where they should be
+        //console.log("100%!!");
+        this.makeItRain();
+        //this.shadowRoot.querySelector('#feedbackSection').style.display = 'none';
+
+        this.shadowRoot.querySelector('.feedbackArea').innerHTML = ``;
+        const bankedTags = this.shadowRoot.querySelectorAll('.correctAnswers .chip');
+        for (const tag of bankedTags) {
+            allBankedCorrect = false;
+            tag.title = tag.dataset.feedback;
+
+            // FEEDBACK SEC
+            this.shadowRoot.querySelector('.feedbackArea').innerHTML += `<li class="green">${tag.dataset.feedback}</li>`;
+          }
+
+      }
+     
+    }
+  }
+
+  
   
     
 
@@ -312,6 +385,7 @@ export class TaggingQuestion extends DDD {
     <div class= "wrapper">
       <div class= "background">
         <div class= "nonsense">Eventually this will be text about whatever picture i choose- This should be a block element that in your demo sits between some text that rambles about the topic in question so it appears more real to the context (this will be used in classes) You're going to make a choice today that will have a direct impact on where you are five years from now. The truth is, you'll make choice like that every day of your life. The problem is that on most days, you won't know the choice you make will have such a huge impact on your life in the future. So if you want to end up in a certain place in the future, you need to be careful of the choices you make today.There was a time in his life when her rudeness would have set him over the edge. He would have raised his voice and demanded to speak to the manager. That was no longer the case. He barely reacted at all, letting the rudeness melt away without saying a word back to her. He had been around long enough to know where rudeness came from and how unhappy the person must be to act in that way. All he could do was feel pity and be happy that he didn't feel the way she did to lash out like that.</div>
+        
         <div id= "image-slot" ></div>
         <img class = "image" src= ${this.image} >
 
@@ -327,11 +401,13 @@ export class TaggingQuestion extends DDD {
                 `)}
               </div>
 
-              <div class ="feedbackArea"></div>
+              <div class ="feedbackArea">
+              
+              </div>
 
               <div class="buttons">
-                <button @click="${this.clear}" class="clear-btn">Reset</button>
-                <button @click="${this.check}" class="check-btn">Check</button>
+                <button @click="${this.reset}" class="resetButton">Reset</button>
+                <button @click="${this.checkTags}" class="checkBtn">Check</button>
               </div>
             </div>
 
@@ -343,6 +419,7 @@ export class TaggingQuestion extends DDD {
             `)}
           </div>
         </div>
+
       </div>
               
 
@@ -371,3 +448,62 @@ export class TaggingQuestion extends DDD {
 
 globalThis.customElements.define(TaggingQuestion.tag, TaggingQuestion);
 
+
+// checkAnswers() {
+
+//   this.question = ''; 
+//   // this.checkedColor = true;
+
+//   this.correctAnswers.forEach((ans, index) => {
+//     const feedback = this.correctAnswers[index].dataset.feedback;
+//     let colorClass; // Declare colorClass variable outside the if-else block
+
+//     if (this.answers[index].dataset.correct == true) {
+//       colorClass = 'correct'; // Set class to correct if feedback is correct
+//     } else {
+//       colorClass = 'incorrect'; // Set class to incorrect if feedback is incorrect
+//     }
+
+//     // Append feedback with the appropriate color class
+//     this.teacherText += `<span class="${colorClass}">${feedback}</span>` + '\n';
+//   });
+
+//   this.requestUpdate();
+
+// // Display feedback in the feedbackArea
+// const feedbackArea = this.shadowRoot.querySelector('.feedbackArea');
+// feedbackArea.innerHTML = ''; // Clear previous feedback
+// result.forEach(({ feedback }) => {
+//   const feedbackDiv = document.createElement('div');
+//   feedbackDiv.textContent = feedback;
+//   feedbackArea.appendChild(feedbackDiv);
+// });
+// }
+
+
+// check() {  
+
+//   fetch('src/answers.json')
+//   .then((response) => response.json())
+//         .then((json) => {
+//           const possibleQuestions = json[this.answerSet];
+          
+
+//         this.options = [];
+//         const tags = [];
+//         for (const key in possibleQuestions) {
+//           const option = possibleQuestions[key];
+//           const choice = document.createElement('choices');
+//           choice.textContent = key;
+//           choice.dataset.correct = option.correct;
+//           choice.dataset.feedback = option.feedback;
+//           tags.push(choice);
+//         }
+
+//         tags.forEach(choice => {
+//           this.options.push(choice);
+//         });
+
+//         //this.shuffle();
+//     });
+//   }

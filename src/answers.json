@@ -38,5 +38,49 @@
       "correct": false,
       "feedback": "Wrong: The color scheme while high contrast in some areas, loses form in others and has written text unrelated to the character."
     }
+  },
+
+  "dogPic": {
+    "On a beach": {
+      "correct": true,
+      "feedback": "Correct: It's a dog on a beach!"
+    },
+    "The dog is sitting": {
+      "correct": true,
+      "feedback": "Correct: The dog is in a sit position!"
+    },
+    "The dog is a Golden Retriever": {
+      "correct": true,
+      "feedback": "Correct: The dogs breed is a Golden Retriever!"
+    },
+    "The dog is a large breed": {
+      "correct": true,
+      "feedback": "Correct: Golden Retrievers are considered large breed dogs!"
+    },
+    "The dog is a very good girl": {
+      "correct": true,
+      "feedback": "Correct: The dog is being good sitting for a picture so they are a very good girl!"
+    },
+    "The dog is in the forest": {
+      "correct": false,
+      "feedback": "Wrong: There is sand and the ocean so the dog is at the beach!"
+    },
+    "The dog went swimming": {
+      "correct": false,
+      "feedback": "Wrong: Its fur is dry so it didn't go swimming!"
+    },
+    "The dog is named Daisy": {
+      "correct": false,
+      "feedback": "Wrong: We don't know the dog or its name!"
+    },
+    "The dog is completely clean": {
+      "correct": false,
+      "feedback": "Wrong: The dog is at the beach and in sand so she is not completely cleam!"
+    },
+    "The dog is a dalmation": {
+      "correct": false,
+      "feedback": "Wrong: You can tell by the dogs coloring and characteristics that it is a Golden Retriever"
+    }
+
   }
-}
+  }
