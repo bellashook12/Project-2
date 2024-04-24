@@ -10,10 +10,10 @@ export class TaggingQuestion extends DDD {
   
   constructor() {
     super();
-    this.question = "Which of the following big ideas would YOU associate with this artistic work?";
-    this.image = "https://private-user-images.githubusercontent.com/329735/320881436-b1e940c9-b838-4e0f-acfb-2d354926bc8d.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTMyODUzOTcsIm5iZiI6MTcxMzI4NTA5NywicGF0aCI6Ii8zMjk3MzUvMzIwODgxNDM2LWIxZTk0MGM5LWI4MzgtNGUwZi1hY2ZiLTJkMzU0OTI2YmM4ZC5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNDE2JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDQxNlQxNjMxMzdaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT0wZTc4YjA1NWZhYmE0MWNiNWVkOGFiNmZhZTU4Nzg3NDJmOTQxYmNhY2MwMDg3YWNhMDQyYzQ5N2NjN2E1NzI1JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.YVplTmO04YCMAImA0GGmFG5bU2UBpI-I1Cy2LoR7bPs";    
+    this.question = "default";
+    this.image = "";    
 
-    this.options = ["Good Form", "Poor Taste", "Contrasting Themes", "AI", "Shading", "Original Work", "Accessible"];
+    //this.options = ["Good Form", "Poor Taste", "Contrasting Themes", "AI", "Shading", "Original Work", "Accessible"];
     this.correctAnswers = [""];
     this.draggedIndex;
     this.draggedFrom;
@@ -21,8 +21,7 @@ export class TaggingQuestion extends DDD {
 
     this.checked = false;
     this.answerSet = "default";
-    
-    
+    this.options = []; 
     
 
   }
@@ -33,8 +32,8 @@ export class TaggingQuestion extends DDD {
       :host {
         display: flex;
         padding: var(--ddd-spacing-4);
-       // align-items: center;
-       // justify-content: center;
+        align-items: center;
+        justify-content: center;
         
       }
 
@@ -42,26 +41,32 @@ export class TaggingQuestion extends DDD {
         background-color: var(--ddd-theme-default-limestoneMaxLight);
         padding: var(--ddd-spacing-3);
         display:flex;
-        height: 1400px;
-        width: 900px;
+        height: 1500px;
+        width: 1000px;
         flex-direction: column;
+        justify-content: center;
+        
       }
 
       .image{
         display: flex;
-        height: 200px;
-        width: 200px;
-        padding: var(--ddd-spacing-3);
+        height: 400px;
+        width: 400px;
+        border: solid;
+        align-self: center;
+        
         
         
       }
 
       .question {
         color: black;
-        font-size: 32px;
-        padding: var(--ddd-spacing-3);
+        font-size: 30px;
+        padding: var(--ddd-spacing-4);
+        padding-top:var(--ddd-spacing-6);
+        flex-direction: column;
       }
-/
+
 
       .answers-start-box{
         padding: var(--ddd-spacing-3);
@@ -69,16 +74,29 @@ export class TaggingQuestion extends DDD {
 
       .answer-options-box {
         font-size: 28px;
-        display: inline;
+        display: inline-flex;
         margin: var(--ddd-spacing-3);
         padding: var(--ddd-spacing-4);
         cursor: pointer;
         border: solid 3px var(--ddd-theme-default-keystoneYellow);
         background-color: var(--ddd-theme-default-roarLight);
-
+        flex-direction: row;
+        
 
         
       }
+
+
+      .choices{
+        border: solid 1px;
+        display: flex;
+        padding: 8px;
+        margin: 8px;
+        justify-content: center;
+        align-items: center;
+        
+      }
+
 
       .answer-drop-box{
         background-color: var(--ddd-theme-default-alertNonEmergency);
@@ -91,14 +109,19 @@ export class TaggingQuestion extends DDD {
         min-height: 32px;
        
         display: flex;
+        flex-direction: column;
         
       }
 
 
       .buttons {
-        //display: flex;
-        padding: var(--ddd-spacing-3);
+        display: flex;
+        padding: var(--ddd-spacing-6);
         margin: var(--ddd-spacing-3);
+        align-self: center;
+        align-self: center;
+        align-items: center;
+        justify-content: center;
       
         
       }
@@ -106,9 +129,13 @@ export class TaggingQuestion extends DDD {
       .buttons button{
         width: 50px;
         font-size: 30px;
-        display: flex;
+        display: inline-flex;
         padding: 8px;
         margin: 16px;
+        align-self: center;
+        align-items: center;
+        justify-content: center;
+        width: 200px;
         
         
       }
@@ -116,43 +143,49 @@ export class TaggingQuestion extends DDD {
       .nonsense{
         padding: var(--ddd-spacing-3);
         font-size: 24px;
+        flex-direction: column;
+        padding-bottom: 30px;
       }
+
+      .feedbackArea{
+        background-color: lightgray;
+        height: 10px;
+      }
+
       
-
-
-
   `;
   }
 
- // check() {  
 
-//   fetch('answers.json')
-//   .then(response => response.json())
-//         .then(data => {
-//           console.log(data);
-//             const correctAnswers = data.haxLogo;
+ check() {  
 
-//             const feedbacks = [];
-//             this.correctAnswers.forEach(answer => {
-//                 if (correctAnswers.hasOwnProperty(answer)) {
-//                     if (correctAnswers[answer].correct) {
-//                         feedbacks.push(correctAnswers[answer].feedback);
-//                     }
-//                 }
-//             });
+  fetch('src/answers.json')
+  .then((response) => response.json())
+        .then((json) => {
+          const possibleQuestions = json[this.answerSet];
+          
 
-//             if (feedbacks.length === 0) {
-//                 alert("None of the answers are correct!");
-//             } else {
-//                 feedbacks.forEach(feedback => {
-//                     alert(feedback);
-//                 });
-//             }
-//         })
-//         .catch(error => {
-//             console.error('Error fetching JSON file: ', error);
-//         });
-// }
+        this.options = [];
+        const tags = [];
+        for (const key in possibleQuestions) {
+          const option = possibleQuestions[key];
+          const choice = document.createElement('choices');
+          choice.textContent = key;
+          choice.dataset.correct = option.correct;
+          choice.dataset.feedback = option.feedback;
+          tags.push(choice);
+        }
+
+        tags.forEach(choice => {
+          this.options.push(choice);
+        });
+
+        //this.shuffle();
+    });
+  }
+
+          
+
 
 
   firstUpdated() {
@@ -175,6 +208,7 @@ export class TaggingQuestion extends DDD {
       questionBox.addEventListener('dragleave', (e) => this.dragLeave(e));
       questionBox.addEventListener('drop', (e) => this.drop(e, 'answer-options-box'));
     });
+    this.check();
   }
 
   dragOver(e) {
@@ -195,8 +229,13 @@ export class TaggingQuestion extends DDD {
     e.target.classList.remove('hovered');
   }
 
-  drop(e, target) {
+  drop(e, target, index, from) {
     e.preventDefault();
+
+    if (this.draggedIndex == null && this.draggedFrom == null) {
+      this.draggedIndex = index;
+      this.draggedFrom = from;
+    }
 
     e.target.classList.remove('hovered');
 
@@ -212,7 +251,8 @@ export class TaggingQuestion extends DDD {
       }
     }
     this.hintTextCheck();
-
+    this.draggedIndex = null;
+    this.draggedFrom = null;
     this.requestUpdate();
   }
 
@@ -235,19 +275,36 @@ export class TaggingQuestion extends DDD {
 
       this.correctAnswers = [];
       
-    }
-    this.requestUpdate();
-  }
-
-  check() {
-    if (this.correctAnswers != '') {
       
     }
     this.requestUpdate();
   }
 
+  checkAnswers() {
+    
+    const correctAnswers = this.options.map(option => option.textContent);
+  const correctOptions = this.correctOptions;
+  const feedback = correctOptions.map(option => option.dataset.feedback);
 
+  // Compare user answers with correct answers
+  const result = correctAnswers.map((userAnswer, index) => {
+    const correctAnswer = correctOptions[index].textContent;
+    const isCorrect = userAnswer === correctAnswer;
+    const feedbackMessage = isCorrect ? "Correct" : `Incorrect. Feedback: ${feedback[index]}`;
+    return { answer: userAnswer, correct: isCorrect, feedback: feedbackMessage };
+  });
 
+  // Display feedback in the feedbackArea
+  const feedbackArea = this.shadowRoot.querySelector('.feedbackArea');
+  feedbackArea.innerHTML = ''; // Clear previous feedback
+  result.forEach(({ feedback }) => {
+    const feedbackDiv = document.createElement('div');
+    feedbackDiv.textContent = feedback;
+    feedbackArea.appendChild(feedbackDiv);
+  });
+}
+  
+    
 
   
   render() {
@@ -263,12 +320,14 @@ export class TaggingQuestion extends DDD {
           <div class="answer-space">
               <div class="answer-drop-box">
                 ${this.hintText}
-                ${this.correctAnswers.map((answer, index) => html`
+                ${this.correctAnswers.map((options, index) => html`
                   <div class="answers-wrapper">
-                    <div class="correctAnswers" draggable="true" data-index="${index}" data-origin="answer-drop-box">${answer}</div>
+                    <div class="correctAnswers" draggable="true" data-index="${index}" data-origin="answer-drop-box">${options}</div>
                   </div>
                 `)}
               </div>
+
+              <div class ="feedbackArea"></div>
 
               <div class="buttons">
                 <button @click="${this.clear}" class="clear-btn">Reset</button>
@@ -277,9 +336,9 @@ export class TaggingQuestion extends DDD {
             </div>
 
           <div class="answer-options-box">
-            ${this.options.map((question, index) => html`
+            ${this.options.map((options, index) => html`
               <div class="choices-wrapper">
-                <div class="choices" draggable="true" data-index="${index}" data-origin="answer-options-box">${question}</div>
+                <div class="choices" draggable="true" data-index="${index}" data-origin="answer-options-box">${options}</div>
               </div>
             `)}
           </div>
@@ -301,6 +360,10 @@ export class TaggingQuestion extends DDD {
       draggedIndex: { type: Number, reflect: true },
       draggedFrom: { type: String, reflect: true},
       hintText: { type: String, reflect: true},
+      answerSet: { type: String, reflect: true},
+      question: { type: String, reflect: true},
+      image: { type: String, reflect: true},
+      
       
     };
   }
