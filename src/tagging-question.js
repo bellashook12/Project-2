@@ -13,7 +13,6 @@ export class TaggingQuestion extends DDD {
     this.question = "default";
     this.image = "";    
 
-    //this.options = ["Good Form", "Poor Taste", "Contrasting Themes", "AI", "Shading", "Original Work", "Accessible"];
     this.correctAnswers = [""];
     this.draggedIndex;
     this.draggedFrom;
@@ -34,6 +33,8 @@ export class TaggingQuestion extends DDD {
         padding: var(--ddd-spacing-4);
         align-items: center;
         justify-content: center;
+        --correct: green;
+        --incorrect: red;
         
       }
 
@@ -42,7 +43,7 @@ export class TaggingQuestion extends DDD {
         padding: var(--ddd-spacing-3);
         display:flex;
         height: 1500px;
-        width: 1000px;
+        width: 1400px;
         flex-direction: column;
         justify-content: center;
         
@@ -78,15 +79,12 @@ export class TaggingQuestion extends DDD {
         margin: var(--ddd-spacing-3);
         padding: var(--ddd-spacing-4);
         cursor: pointer;
-        border: solid 3px var(--ddd-theme-default-keystoneYellow);
-        background-color: var(--ddd-theme-default-roarLight);
+        border: solid 3px var(--ddd-theme-default-wonderPurple);
+        background-color: var(--ddd-theme-default-alertNonEmergency);
         flex-direction: row;
-        height: 300px;
+        height: 200px;
       //  justify-content: flex-start;
        // align-items: flex-start;
-
-
-        
 
         
       }
@@ -106,16 +104,16 @@ export class TaggingQuestion extends DDD {
 
       .answer-drop-box{
         background-color: var(--ddd-theme-default-alertNonEmergency);
-        border: dashed 3px var(--ddd-theme-default-forestGreen);
+        border: dashed 3px var(--ddd-theme-default-opportunityGreen);
         font-size: 28px;
-        display: inline;
+        //display: inline;
         margin: var(--ddd-spacing-3);
         padding: var(--ddd-spacing-4);
         cursor: pointer;
         min-height: 32px;
        
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         
       }
 
@@ -128,6 +126,8 @@ export class TaggingQuestion extends DDD {
         align-self: center;
         align-items: center;
         justify-content: center;
+        
+        
       
         
       }
@@ -135,13 +135,16 @@ export class TaggingQuestion extends DDD {
       .buttons button{
         width: 50px;
         font-size: 30px;
-        display: inline-flex;
+        display: flex;
         padding: 8px;
         margin: 16px;
         align-self: center;
         align-items: center;
         justify-content: center;
         width: 200px;
+        background-color: var(--ddd-theme-default-linkLight);
+        
+        
         
         
       }
@@ -155,39 +158,57 @@ export class TaggingQuestion extends DDD {
 
       .feedbackArea{
         //background-color: lightgray;
-        height: 10px;
         flex-direction: column;
-        height: 30px;
+        height: 120px;
         font-size: 18px;
+        display: flex;
+        max-height: 120px;
       }
       .choices-wrapper{
         //display: flex;
         //max-width: 100px;
+      }
+      .green {
+        color: var(--correct);
+      }
+      .red {
+        color: var(--incorrect);
+      }
+
+      .correctAnswers{
+        border: solid 1px;
+        display: flex;
+        padding: 8px;
+        margin: 8px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+
       }
 
       
   `;
   }
 
-  // makeItRain() {
-  //   // this is called a dynamic import. It means it won't import the code for confetti until this method is called
-  //   // the .then() syntax after is because dynamic imports return a Promise object. Meaning the then() code
-  //   // will only run AFTER the code is imported and available to us
-  //   import("@lrnwebcomponents/multiple-choice/lib/confetti-container.js").then(
-  //     (module) => {
-  //       // This is a minor timing 'hack'. We know the code library above will import prior to this running
-  //       // The "set timeout 0" means "wait 1 microtask and run it on the next cycle.
-  //       // this "hack" ensures the element has had time to process in the DOM so that when we set popped
-  //       // it's listening for changes so it can react
-  //       setTimeout(() => {
-  //         // forcibly set the poppped attribute on something with id confetti
-  //         // while I've said in general NOT to do this, the confetti container element will reset this
-  //         // after the animation runs so it's a simple way to generate the effect over and over again
-  //         this.shadowRoot.querySelector("#confetti").setAttribute("popped", "");
-  //       }, 0);
-  //     }
-  //   );
-  // }
+  makeItRain() {
+    // this is called a dynamic import. It means it won't import the code for confetti until this method is called
+    // the .then() syntax after is because dynamic imports return a Promise object. Meaning the then() code
+    // will only run AFTER the code is imported and available to us
+    import("@lrnwebcomponents/multiple-choice/lib/confetti-container.js").then(
+      (module) => {
+        // This is a minor timing 'hack'. We know the code library above will import prior to this running
+        // The "set timeout 0" means "wait 1 microtask and run it on the next cycle.
+        // this "hack" ensures the element has had time to process in the DOM so that when we set popped
+        // it's listening for changes so it can react
+        setTimeout(() => {
+          // forcibly set the poppped attribute on something with id confetti
+          // while I've said in general NOT to do this, the confetti container element will reset this
+          // after the animation runs so it's a simple way to generate the effect over and over again
+          this.shadowRoot.querySelector("#confetti").setAttribute("popped", "");
+        }, 0);
+      }
+    );
+  }
 
 
 
@@ -412,6 +433,7 @@ export class TaggingQuestion extends DDD {
                          
         <div id= "image-slot" ></div>
         <img class = "image" src= ${this.image} >
+        <confetti-container id="confetti">
 
 
           <div class="question">Question: ${this.question}</div>
@@ -442,6 +464,7 @@ export class TaggingQuestion extends DDD {
               </div>
             `)}
           </div>
+          </confetti-container>
         </div>
                                
 
