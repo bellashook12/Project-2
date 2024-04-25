@@ -74,13 +74,18 @@ export class TaggingQuestion extends DDD {
 
       .answer-options-box {
         font-size: 28px;
-        display: inline-flex;
+        display: flex;
         margin: var(--ddd-spacing-3);
         padding: var(--ddd-spacing-4);
         cursor: pointer;
         border: solid 3px var(--ddd-theme-default-keystoneYellow);
         background-color: var(--ddd-theme-default-roarLight);
         flex-direction: row;
+        height: 300px;
+      //  justify-content: flex-start;
+       // align-items: flex-start;
+
+
         
 
         
@@ -94,6 +99,7 @@ export class TaggingQuestion extends DDD {
         margin: 8px;
         justify-content: center;
         align-items: center;
+        display: flex;
         
       }
 
@@ -154,10 +160,35 @@ export class TaggingQuestion extends DDD {
         height: 30px;
         font-size: 18px;
       }
+      .choices-wrapper{
+        //display: flex;
+        //max-width: 100px;
+      }
 
       
   `;
   }
+
+  // makeItRain() {
+  //   // this is called a dynamic import. It means it won't import the code for confetti until this method is called
+  //   // the .then() syntax after is because dynamic imports return a Promise object. Meaning the then() code
+  //   // will only run AFTER the code is imported and available to us
+  //   import("@lrnwebcomponents/multiple-choice/lib/confetti-container.js").then(
+  //     (module) => {
+  //       // This is a minor timing 'hack'. We know the code library above will import prior to this running
+  //       // The "set timeout 0" means "wait 1 microtask and run it on the next cycle.
+  //       // this "hack" ensures the element has had time to process in the DOM so that when we set popped
+  //       // it's listening for changes so it can react
+  //       setTimeout(() => {
+  //         // forcibly set the poppped attribute on something with id confetti
+  //         // while I've said in general NOT to do this, the confetti container element will reset this
+  //         // after the animation runs so it's a simple way to generate the effect over and over again
+  //         this.shadowRoot.querySelector("#confetti").setAttribute("popped", "");
+  //       }, 0);
+  //     }
+  //   );
+  // }
+
 
 
  fromJson() {  
@@ -282,7 +313,7 @@ export class TaggingQuestion extends DDD {
     }
 
     this.checked = false; 
-    this.shadowRoot.querySelector('.checkBtn').classList.remove('disabled'); // Enable check button
+    this.shadowRoot.querySelector('.checkBtn').classList.remove('disabled'); 
 
     this.shuffle();
     this.requestUpdate();
@@ -312,11 +343,9 @@ export class TaggingQuestion extends DDD {
   
       this.shadowRoot.querySelector('.checkBtn').classList.add('disabled');
   
-      // Reset feedback section
       this.shadowRoot.querySelector('.feedbackArea').style.display = 'flex';
       this.shadowRoot.querySelector('.feedbackArea').innerHTML = ``;
 
-      // Dropped tags:
       const droppedTags = this.shadowRoot.querySelectorAll('.correctAnswers .chip');
       for (const tag of droppedTags) {
           const isCorrect = tag.dataset.correct === 'true';
@@ -324,7 +353,6 @@ export class TaggingQuestion extends DDD {
             tag.classList.add("correct");
             
 
-            // FEEDBACK SEC CORRECT
             this.shadowRoot.querySelector('.feedbackArea').innerHTML += `<li class="green">${tag.dataset.feedback}</li>`;
           }
           else {
@@ -333,14 +361,12 @@ export class TaggingQuestion extends DDD {
             tag.title = tag.dataset.feedback;
             
 
-            // FEEDBACK SEC INCORRECT
             this.shadowRoot.querySelector('.feedbackArea').innerHTML += `<li class="red">${tag.dataset.feedback}</li>`;
           }
           tag.classList.add("noPointerEvents");
           tag.setAttribute('tabindex', -1);
       }
   
-      // Banked tags:
       const bankedTags = this.shadowRoot.querySelectorAll('.choices .chip');
       for (const tag of bankedTags) {
           const isCorrect = tag.dataset.correct === 'true';
@@ -348,17 +374,16 @@ export class TaggingQuestion extends DDD {
             allBankedCorrect = false;
             tag.title = tag.dataset.feedback;
 
-            // FEEDBACK SEC
-            //this.shadowRoot.querySelector('#feedbackSection').innerHTML += `<li class="green">${tag.dataset.feedback}</li>`;
+            
+            this.shadowRoot.querySelector('#feedbackSection').innerHTML += `<li class="green">${tag.dataset.feedback}</li>`;
           }
           tag.classList.add("noPointerEvents");
           tag.setAttribute('tabindex', -1);
       }
   
-      if(allDroppedCorrect && allBankedCorrect) {  // All answers (banked and dropped) are where they should be
-        //console.log("100%!!");
+      if(allDroppedCorrect && allBankedCorrect) {  
         this.makeItRain();
-        //this.shadowRoot.querySelector('#feedbackSection').style.display = 'none';
+       
 
         this.shadowRoot.querySelector('.feedbackArea').innerHTML = ``;
         const bankedTags = this.shadowRoot.querySelectorAll('.correctAnswers .chip');
@@ -366,7 +391,6 @@ export class TaggingQuestion extends DDD {
             allBankedCorrect = false;
             tag.title = tag.dataset.feedback;
 
-            // FEEDBACK SEC
             this.shadowRoot.querySelector('.feedbackArea').innerHTML += `<li class="green">${tag.dataset.feedback}</li>`;
           }
 
@@ -385,7 +409,7 @@ export class TaggingQuestion extends DDD {
     <div class= "wrapper">
       <div class= "background">
         <div class= "nonsense">Eventually this will be text about whatever picture i choose- This should be a block element that in your demo sits between some text that rambles about the topic in question so it appears more real to the context (this will be used in classes) You're going to make a choice today that will have a direct impact on where you are five years from now. The truth is, you'll make choice like that every day of your life. The problem is that on most days, you won't know the choice you make will have such a huge impact on your life in the future. So if you want to end up in a certain place in the future, you need to be careful of the choices you make today.There was a time in his life when her rudeness would have set him over the edge. He would have raised his voice and demanded to speak to the manager. That was no longer the case. He barely reacted at all, letting the rudeness melt away without saying a word back to her. He had been around long enough to know where rudeness came from and how unhappy the person must be to act in that way. All he could do was feel pity and be happy that he didn't feel the way she did to lash out like that.</div>
-        
+                         
         <div id= "image-slot" ></div>
         <img class = "image" src= ${this.image} >
 
@@ -419,6 +443,7 @@ export class TaggingQuestion extends DDD {
             `)}
           </div>
         </div>
+                               
 
       </div>
               
@@ -448,62 +473,3 @@ export class TaggingQuestion extends DDD {
 
 globalThis.customElements.define(TaggingQuestion.tag, TaggingQuestion);
 
-
-// checkAnswers() {
-
-//   this.question = ''; 
-//   // this.checkedColor = true;
-
-//   this.correctAnswers.forEach((ans, index) => {
-//     const feedback = this.correctAnswers[index].dataset.feedback;
-//     let colorClass; // Declare colorClass variable outside the if-else block
-
-//     if (this.answers[index].dataset.correct == true) {
-//       colorClass = 'correct'; // Set class to correct if feedback is correct
-//     } else {
-//       colorClass = 'incorrect'; // Set class to incorrect if feedback is incorrect
-//     }
-
-//     // Append feedback with the appropriate color class
-//     this.teacherText += `<span class="${colorClass}">${feedback}</span>` + '\n';
-//   });
-
-//   this.requestUpdate();
-
-// // Display feedback in the feedbackArea
-// const feedbackArea = this.shadowRoot.querySelector('.feedbackArea');
-// feedbackArea.innerHTML = ''; // Clear previous feedback
-// result.forEach(({ feedback }) => {
-//   const feedbackDiv = document.createElement('div');
-//   feedbackDiv.textContent = feedback;
-//   feedbackArea.appendChild(feedbackDiv);
-// });
-// }
-
-
-// check() {  
-
-//   fetch('src/answers.json')
-//   .then((response) => response.json())
-//         .then((json) => {
-//           const possibleQuestions = json[this.answerSet];
-          
-
-//         this.options = [];
-//         const tags = [];
-//         for (const key in possibleQuestions) {
-//           const option = possibleQuestions[key];
-//           const choice = document.createElement('choices');
-//           choice.textContent = key;
-//           choice.dataset.correct = option.correct;
-//           choice.dataset.feedback = option.feedback;
-//           tags.push(choice);
-//         }
-
-//         tags.forEach(choice => {
-//           this.options.push(choice);
-//         });
-
-//         //this.shuffle();
-//     });
-//   }
