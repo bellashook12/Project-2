@@ -33,8 +33,8 @@ export class TaggingQuestion extends DDD {
         padding: var(--ddd-spacing-4);
         align-items: center;
         justify-content: center;
-        --correct: green;
-        --incorrect: red;
+        --correct: var(--ddd-theme-default-opportunityGreen);
+        --incorrect: var(--ddd-theme-default-original87Pink);
         
       }
 
@@ -93,8 +93,8 @@ export class TaggingQuestion extends DDD {
       .choices{
         border: solid 1px;
         display: flex;
-        padding: 8px;
-        margin: 8px;
+        padding: var(--ddd-spacing-2);
+        margin: var(--ddd-spacing-2);
         justify-content: center;
         align-items: center;
         display: flex;
@@ -136,16 +136,14 @@ export class TaggingQuestion extends DDD {
         width: 50px;
         font-size: 30px;
         display: flex;
-        padding: 8px;
-        margin: 16px;
+        padding: var(--ddd-spacing-2);
+        margin: var(--ddd-spacing-4);
         align-self: center;
         align-items: center;
         justify-content: center;
         width: 200px;
         background-color: var(--ddd-theme-default-linkLight);
-        
-        
-        
+      
         
       }
 
@@ -153,7 +151,7 @@ export class TaggingQuestion extends DDD {
         padding: var(--ddd-spacing-3);
         font-size: 24px;
         flex-direction: column;
-        padding-bottom: 30px;
+        padding-bottom: var(--ddd-spacing-7);
       }
 
       .feedbackArea{
@@ -164,10 +162,7 @@ export class TaggingQuestion extends DDD {
         display: flex;
         max-height: 120px;
       }
-      .choices-wrapper{
-        //display: flex;
-        //max-width: 100px;
-      }
+     
       .green {
         color: var(--correct);
       }
@@ -178,15 +173,26 @@ export class TaggingQuestion extends DDD {
       .correctAnswers{
         border: solid 1px;
         display: flex;
-        padding: 8px;
-        margin: 8px;
+        padding: var(--ddd-spacing-2);
+        margin: var(--ddd-spacing-2);
         justify-content: center;
         align-items: center;
         display: flex;
 
       }
+      .correct {
+        border: solid 2px var(--correct);
+        color: var(--correct);
+        background: var(--ddd-theme-default-successLight);
+        padding: var(--ddd-spacing-2);
+      }
 
-      
+      .incorrect {
+        border: solid 2px var(--incorrect);
+        color: var(--incorrect);
+        background: var(--ddd-theme-default-alertImmediate);
+        padding: var(--ddd-spacing-2);
+
   `;
   }
 
@@ -228,6 +234,7 @@ export class TaggingQuestion extends DDD {
           choice.classList.add('chip');
           choice.textContent = key;
           choice.dataset.correct = option.correct;
+          choice.dataset.correct = option.correct;
           choice.dataset.feedback = option.feedback;
           tags.push(choice);
         }
@@ -255,6 +262,7 @@ export class TaggingQuestion extends DDD {
       answerBox.addEventListener('dragenter', (e) => this.dragEnter(e));
       answerBox.addEventListener('dragleave', (e) => this.dragLeave(e));
       answerBox.addEventListener('drop', (e) => this.drop(e, 'answer-drop-box'));
+      
     });
 
     questionBoxes.forEach(questionBox => {
@@ -333,8 +341,18 @@ export class TaggingQuestion extends DDD {
         this.correctAnswers = [];
     }
 
+    const answerChips = this.shadowRoot.querySelectorAll('.correctAnswers .chip');
+    console.log(answerChips); 
+    answerChips.forEach(chip => {
+    console.log(chip); 
+    chip.classList.remove('correct');
+    chip.classList.remove('incorrect');
+  });
+
+
     this.checked = false; 
     this.shadowRoot.querySelector('.checkBtn').classList.remove('disabled'); 
+
 
     this.shuffle();
     this.requestUpdate();
@@ -346,10 +364,6 @@ export class TaggingQuestion extends DDD {
       [this.options[i], this.options[j]] = [this.options[j], this.options[i]];
     }
   }
-
-
- 
-
 
 
 
@@ -375,6 +389,7 @@ export class TaggingQuestion extends DDD {
             
 
             this.shadowRoot.querySelector('.feedbackArea').innerHTML += `<li class="green">${tag.dataset.feedback}</li>`;
+           
           }
           else {
             tag.classList.add("incorrect");
@@ -383,9 +398,11 @@ export class TaggingQuestion extends DDD {
             
 
             this.shadowRoot.querySelector('.feedbackArea').innerHTML += `<li class="red">${tag.dataset.feedback}</li>`;
+            
           }
           tag.classList.add("noPointerEvents");
           tag.setAttribute('tabindex', -1);
+         // tag.style.border = 'none';
       }
   
       const bankedTags = this.shadowRoot.querySelectorAll('.choices .chip');
