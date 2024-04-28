@@ -21,6 +21,7 @@ export class TaggingQuestion extends DDD {
     this.checked = false;
     this.answerSet = "default";
     this.options = []; 
+    this.nonsense= "";
     
 
   }
@@ -446,9 +447,8 @@ export class TaggingQuestion extends DDD {
     return html`
     <div class= "wrapper">
       <div class= "background">
-        <div class= "nonsense">Eventually this will be text about whatever picture i choose- This should be a block element that in your demo sits between some text that rambles about the topic in question so it appears more real to the context (this will be used in classes) You're going to make a choice today that will have a direct impact on where you are five years from now. The truth is, you'll make choice like that every day of your life. The problem is that on most days, you won't know the choice you make will have such a huge impact on your life in the future. So if you want to end up in a certain place in the future, you need to be careful of the choices you make today.There was a time in his life when her rudeness would have set him over the edge. He would have raised his voice and demanded to speak to the manager. That was no longer the case. He barely reacted at all, letting the rudeness melt away without saying a word back to her. He had been around long enough to know where rudeness came from and how unhappy the person must be to act in that way. All he could do was feel pity and be happy that he didn't feel the way she did to lash out like that.</div>
-                         
-        <div id= "image-slot" ></div>
+        <div class= "nonsense">${this.nonsense}</div>
+                <div id= "image-slot" ></div>
         <img class = "image" src= ${this.image} >
         <confetti-container id="confetti">
 
@@ -505,6 +505,7 @@ export class TaggingQuestion extends DDD {
       answerSet: { type: String, reflect: true},
       question: { type: String, reflect: true},
       image: { type: String, reflect: true},
+      nonsense: { type: String, reflect: true},
       
       
     };
